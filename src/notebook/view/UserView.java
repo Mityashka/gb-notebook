@@ -3,7 +3,9 @@ package notebook.view;
 import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
+import notebook.util.UserValidator;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class UserView {
@@ -17,7 +19,7 @@ public class UserView {
         Commands com;
 
         while (true) {
-            String command = prompt("Введите команду: ");
+            String command = prompt("Введите команду: ").toUpperCase();
             com = Commands.valueOf(command);
             if (com == Commands.EXIT) return;
             switch (com) {
@@ -35,6 +37,9 @@ public class UserView {
                         throw new RuntimeException(e);
                     }
                     break;
+                case READALL:
+                    System.out.println(userController.readAll());
+                    break;
                 case UPDATE:
                     String userId = prompt("Enter user id: ");
                     userController.updateUser(userId, createUser());
@@ -48,10 +53,21 @@ public class UserView {
         return in.nextLine();
     }
 
+    public String checkLine(String str) {
+        str = str.trim().replace(" ", "");
+        if (!str.isEmpty()) {
+            return str;
+        } else {
+            System.out.println("Значение не может быть пустым.\n");
+            str = prompt("Введите корректные данные: ");
+            return checkLine(str);
+        }
+    }
+
     private User createUser() {
-        String firstName = prompt("Имя: ");
-        String lastName = prompt("Фамилия: ");
-        String phone = prompt("Номер телефона: ");
+        String firstName = checkLine(prompt("Имя: "));
+        String lastName = checkLine(prompt("Фамилия: "));
+        String phone = checkLine(prompt("Номер телефона: "));
         return new User(firstName, lastName, phone);
     }
 }
