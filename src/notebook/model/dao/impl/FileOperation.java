@@ -60,4 +60,17 @@ public class FileOperation implements Operation {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public void deleteUser(Long userId) {
+        List<String> lines = readAll();
+        List<String> updatedLines = new ArrayList<>();
+        for (String line : lines) {
+            String[] parts = line.split(",");
+            if (!parts[0].equals(String.valueOf(userId))) {
+                updatedLines.add(line);
+            }
+        }
+        saveAll(updatedLines);
+    }
 }

@@ -3,7 +3,6 @@ package notebook.view;
 import notebook.controller.UserController;
 import notebook.model.User;
 import notebook.util.Commands;
-import notebook.util.UserValidator;
 
 import java.util.Locale;
 import java.util.Scanner;
@@ -43,6 +42,10 @@ public class UserView {
                 case UPDATE:
                     String userId = prompt("Enter user id: ");
                     userController.updateUser(userId, createUser());
+                case DELETE:
+                    String userIdToDelete = prompt("Enter useer id to delete: ");
+                    userController.deleteUser(Long.parseLong(userIdToDelete));
+                    break;
             }
         }
     }
@@ -69,5 +72,9 @@ public class UserView {
         String lastName = checkLine(prompt("Фамилия: "));
         String phone = checkLine(prompt("Номер телефона: "));
         return new User(firstName, lastName, phone);
+    }
+    private void deleteUser(){
+        String userIdToDelete = prompt("Enter user Id to delete: ");
+        userController.deleteUser(Long.parseLong(userIdToDelete));
     }
 }
